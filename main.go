@@ -3,7 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"sync"
+
+	"github.com/jcelliott/lumber"
 )
 
 const Version = "1.0.1"
@@ -46,22 +50,54 @@ type User struct {
 }
 
 // intialize and create new database
-func New() {}
+func New(dir string, options *Options) (*Driver, error) {
+
+	dir = filepath.Clean(dir)
+
+	opts := Options{}
+
+	//get options
+	if options != nil {
+		opts = *options
+	}
+
+	//get logger
+	if opts.Logger == nil {
+		opts.Logger = lumber.NewConsoleLogger((lumber.INFO))
+	}
+
+	//create driver
+	driver := Driver{
+		dir:     dir,
+		mutexes: make(map[string]*sync.Mutex),
+		log:     opts.Logger,
+	}
+
+	//check if dir exists
+	if _, err := os.Stat(dir); err == nil {
+		opts.Logger.Debug("Using '%s' (database already exists)\n", dir)
+		return &driver, nil
+	}
+
+	//create databe if not exists
+	opts.Logger.Debug("Creating the database at '%s'...\n", dir)
+	return &driver, os.MkdirAll(dir, 0755)
+}
 
 // write to database
-func Write() error {}
+func (d *Driver) Write() error {}
 
 // read from database
-func Read() error {}
+func (d *Driver) Read() error {}
 
 // read All from database
-func ReadAll() {}
+func (d *Driver) ReadAll() {}
 
 // delete record from database
-func Delete() error {}
+func (d *Driver) Delete() error {}
 
 // get or create mutex if not exists
-func getorCreateMutex() {}
+func (d *Driver) getorCreateMutex() {}
 
 func main() {
 	dir := "./"
