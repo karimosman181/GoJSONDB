@@ -98,8 +98,8 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 	mutex := d.getorCreateMutex(collection)
 
 	//prevent changes to database until the func is complete
-	mutex.lock()
-	defer mutex.Unclock()
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	//path to save the record
 	dir := filepath.Join(d.dir, collection)
@@ -122,7 +122,7 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 		return err
 	}
 
-	return nil
+	return os.Rename(tmpPath, fnlPath)
 }
 
 // read from database
