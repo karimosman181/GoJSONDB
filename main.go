@@ -135,7 +135,22 @@ func (d *Driver) ReadAll() {}
 func (d *Driver) Delete() error {}
 
 // get or create mutex if not exists
-func (d *Driver) getorCreateMutex() {}
+func (d *Driver) getorCreateMutex(collection string) *sync.Mutex {
+
+	d.mutex.Lock()
+	defer d.mutex.Unlock()
+
+	m, ok := d.mutexes[collection]
+
+	//check if exist
+	if !ok {
+		//create mutex
+		m = &sync.Mutex{}
+		d.mutexes[collection] = m
+	}
+
+	return m
+}
 
 // check if dir and files exists
 func stat(path string) (fi os.FileInfo, err error) {
