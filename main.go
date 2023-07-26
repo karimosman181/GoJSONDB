@@ -240,9 +240,9 @@ func main() {
 	}
 
 	employees := []User{
-		{"John", "23", "John@email.j", "JOhn tech", Address{"John city", "John state", "John Country", "0001"}},
-		{"Alex", "33", "Alex@email.a", "Alex tech", Address{"Alex city", "Alex state", "Alex Country", "0002"}},
-		{"Max", "33", "Max@email.m", "Max tech", Address{"Max city", "Max state", "Max Country", "0003"}},
+		{"John", "23", "John@email.j", "JOhn tech", Address{"John city", "John state", "John Country", "1001"}},
+		{"Alex", "33", "Alex@email.a", "Alex tech", Address{"Alex city", "Alex state", "Alex Country", "2002"}},
+		{"Max", "33", "Max@email.m", "Max tech", Address{"Max city", "Max state", "Max Country", "3003"}},
 	}
 
 	//loop over employees and insert to db
