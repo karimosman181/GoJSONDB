@@ -126,7 +126,29 @@ func (d *Driver) Write(collection, resource string, v interface{}) error {
 }
 
 // read from database
-func (d *Driver) Read() error {}
+func (d *Driver) Read(collection, resource string, v interface{}) error {
+	if collection == "" {
+		return fmt.Errorf("Missing collection - no place to save the record!!!")
+	}
+
+	if resource == "" {
+		return fmt.Errorf("Missing resource - unable to read record (no name)!!!")
+	}
+
+	record := filepath.Join(d.dir, collection, resource)
+
+	//check if exists
+	if _, err := stat(record); err != nil {
+		return err
+	}
+
+	b, err := ioutil.ReadFile(record + ".json")
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(b, &v)
+}
 
 // read All from database
 func (d *Driver) ReadAll() {}
